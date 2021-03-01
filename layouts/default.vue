@@ -28,32 +28,32 @@
           </ul>
           <!-- / nav -->
           <ul class="h-r-login">
-            <li id="no-login">
-              <a href="/sing_in" title="登录">
+            <li v-if="!userInfo.id" id="no-login">
+              <a href="/login" title="登录">
                 <em class="icon18 login-icon">&nbsp;</em>
                 <span class="vam ml5">登录</span>
               </a>
               |
-              <a href="/sign_up" title="注册">
+              <a href="/register" title="注册">
                 <span class="vam ml5">注册</span>
               </a>
             </li>
-            <li class="mr10 undis" id="is-login-one">
+            <li v-if="userInfo.id" class="mr10" id="is-login-one">
               <a href="#" title="消息" id="headerMsgCountId">
                 <em class="icon18 news-icon">&nbsp;</em>
               </a>
               <q class="red-point" style="display: none">&nbsp;</q>
             </li>
-            <li class="h-r-user undis" id="is-login-two">
+            <li v-if="userInfo.id" class="h-r-user" id="is-login-two">
               <a href="#" title>
                 <img
-                  src="~/assets/img/avatar-boy.gif"
+                  :src="userInfo.avatar"
                   width="30"
                   height="30"
                   class="vam picImg"
                   alt
                 >
-                <span class="vam disIb" id="userName"></span>
+                <span class="vam disIb" id="userName">{{userInfo.nickname}}</span>
               </a>
               <a href="javascript:void(0)" title="退出" onclick="exit();" class="ml5">退出</a>
             </li>
@@ -134,6 +134,50 @@ import "~/assets/css/reset.css";
 import "~/assets/css/theme.css";
 import "~/assets/css/global.css";
 import "~/assets/css/web.css";
+import cookie from 'js-cookie';//引入cookie组件
+import login from '@/api/login'
 
-export default {};
+export default {
+
+    data(){
+      return {
+        userInfo: {
+          id: '',
+          age: '',
+          avatar: '',
+          mobile: '',
+          nickname: '',
+          sex: ''
+        }
+      }
+    }, 
+    created(){
+      //获取路径的token值
+      const token =  this.$route.query.token
+      if(token){
+        this.getWX(token)
+      } 
+      this.getUserInfo()
+    },
+    methods: {
+      //从cookie中获取登录信息
+      getUserInfo(){
+        var userInfoStr = cookie.get('guli_ucenter')
+        if(userInfoStr){
+          this.userInfo = JSON.parse(userInfoStr)
+        }
+      },
+      //微信登录
+      getWX(token){
+        cookie.set('guli_token', token, { domain: 'localhost',expires:1 })//expires是设置cookie过期时间天数
+      //登录成功根据token获取用户信息
+        login.getUserInfo()
+        .then(response => {
+          this.userInfo = response.data.userInfo
+          //将用户信息记录cookie
+          cookie.set('guli_ucenter', this.userInfo, { domain: 'localhost',expires:1 })
+        })
+      }
+    }
+}
 </script>
