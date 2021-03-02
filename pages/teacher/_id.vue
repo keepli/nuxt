@@ -18,12 +18,12 @@
               <span class="fsize24 c-333">{{teacher.name}}&nbsp;{{teacher.levelStr}}</span>
             </h3>
             <section class="mt10">
-              <span class="t-tag-bg">{{teacher.intro}}</span>
+              <span class="t-tag-bg">{{teacher.career}}</span>
             </section>
             <section class="t-infor-txt">
               <p
                 class="mt20"
-              >{{teacher.career}}</p>
+              >{{teacher.intro}}</p>
             </section>
             <div class="clear"></div>
           </div>

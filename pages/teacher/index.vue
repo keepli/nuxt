@@ -23,7 +23,7 @@
           <!-- /无数据提示 结束-->
           <article class="i-teacher-list">
             <ul class="of">
-              <li v-for="teacher in data.teacherList" :key="teacher.id">
+              <li v-for="teacher in data.list" :key="teacher.id">
                 <section class="i-teach-wrap">
                   <div class="i-teach-pic">
                     <a :href="'/teacher/'+teacher.id" :title="teacher.name" target="_blank">
